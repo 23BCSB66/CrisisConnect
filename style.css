@@ -156,6 +156,8 @@ body {
     position: relative;
     z-index: 1;
     overflow: hidden;
+    cursor: pointer;
+    border: none;
 }
 
 .cta-button::before {
@@ -336,6 +338,166 @@ body {
     line-height: 1.7;
 }
 
+/* Volunteer Section */
+.volunteer-section {
+    padding: 5rem 5%;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #e8f4f5 100%);
+}
+
+.volunteer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.volunteer-info h2 {
+    font-size: 2.8rem;
+    color: var(--dark-color);
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.volunteer-info h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+.volunteer-info p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.volunteer-benefits {
+    list-style: none;
+    margin-top: 2rem;
+}
+
+.volunteer-benefits li {
+    padding: 1rem 0 1rem 3rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+    position: relative;
+    line-height: 1.6;
+}
+
+.volunteer-benefits li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, var(--primary-color), #d62839);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.volunteer-form-container {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+    border-top: 5px solid var(--primary-color);
+}
+
+.volunteer-form-container h3 {
+    font-size: 2rem;
+    color: var(--dark-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.volunteer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.9rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background-color: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(168, 218, 220, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.volunteer-form .cta-button {
+    margin-top: 1rem;
+    width: 100%;
+    animation: none;
+}
+
+.volunteer-form .cta-button:hover {
+    transform: translateY(-2px);
+}
+
 /* CTA Bottom Section */
 .cta-bottom-section {
     background: linear-gradient(135deg, var(--primary-color) 0%, #d62839 100%);
@@ -434,6 +596,26 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 968px) {
+    .volunteer-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .volunteer-info h2::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .volunteer-info {
+        text-align: center;
+    }
+    
+    .volunteer-benefits li {
+        text-align: left;
+    }
+}
+
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;
@@ -465,6 +647,7 @@ body {
     
     .about-section h2,
     .services-section h2,
+    .volunteer-info h2,
     .cta-bottom-section h2 {
         font-size: 2rem;
     }
@@ -472,6 +655,21 @@ body {
     .service-cards {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+    
+    .volunteer-form-container {
+        padding: 1.5rem;
+    }
+    
+    .volunteer-benefits li {
+        padding: 0.8rem 0 0.8rem 2.5rem;
+        font-size: 1rem;
+    }
+    
+    .volunteer-benefits li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 1rem;
     }
     
     .cta-button {
