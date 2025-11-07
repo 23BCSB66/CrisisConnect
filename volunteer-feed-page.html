@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Feed - CrisisConnect</title>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #f1faee;
+            --accent-color: #a8dadc;
+            --dark-color: #1d3557;
+            --text-color: #2b2d42;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .main-header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #2c4a6e 100%);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo img {
+            height: 80px;
+            width: 80px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 0.2rem;
+            align-items: center;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--white);
+            /* Min-width adjusted for single column on desktop */
+            min-width: 250px;
+            max-width: 400px;
+            /* Added max-width for better control */
+            box-shadow: var(--shadow-lg);
+            border-radius: 15px;
+            padding: 1.5rem 0.5rem;
+            /* Adjusted padding */
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            z-index: 1000;
+            /* CHANGE START: Set to flexbox and column direction */
+            display: flex;
+            flex-direction: column;
+            /* CHANGE END */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            color: var(--text-color);
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            transform: scale(1.03);
+        }
+
+        .nav-button {
+            background-color: var(--primary-color);
+            padding: 0.7rem 1.5rem !important;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+        }
+
+        .nav-button:hover {
+            background-color: #d62839;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(29, 53, 87, 0.95) 0%, rgba(44, 74, 110, 0.9) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%231d3557" width="1200" height="600"/><path fill="%23457b9d" d="M0 300L50 283.3C100 266.7 200 233.3 300 233.3C400 233.3 500 266.7 600 283.3C700 300 800 300 900 283.3C1000 266.7 1100 233.3 1150 216.7L1200 200V600H1150C1100 600 1000 600 900 600C800 600 700 600 600 600C500 600 400 600 300 600C200 600 100 600 50 600H0V300Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 218, 220, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: -3rem 5% 3rem 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(168, 218, 220, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            border-top-color: var(--primary-color);
+        }
+
+        .stat-card h3 {
+            color: var(--dark-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--secondary-color);
+            border-radius: 5px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        /* News Section */
+        .news-section {
+            margin: 4rem 0;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .news-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+        }
+
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .news-card:nth-child(1) {
+            border-top-color: #ff4757;
+        }
+
+        .news-card:nth-child(2) {
+            border-top-color: #ff6348;
+        }
+
+        .news-card:nth-child(3) {
+            border-top-color: #ffa502;
+        }
+
+        .news-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.5rem;
+            border-radius: 20px;
+        }
+
+        .news-card:nth-child(1) .news-badge {
+            background: #ff4757;
+            color: var(--white);
+        }
+
+        .news-card:nth-child(2) .news-badge {
+            background: #ff6348;
+            color: var(--white);
+        }
+
+        .news-card:nth-child(3) .news-badge {
+            background: #ffa502;
+            color: var(--white);
+        }
+
+        .news-content {
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .news-title {
+            font-size: 1.4rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .news-description {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .help-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .help-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .help-btn:hover::before {
+            left: 100%;
+        }
+
+        .help-btn:hover {
+            background: #d62839;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        /* Volunteer Options */
+        .volunteer-options {
+            margin: 4rem 0;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #e8f4f5 100%);
+            padding: 4rem 3rem;
+            border-radius: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .option-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .option-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .option-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .option-description {
+            color: var(--text-color);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--dark-color);
+            color: var(--white);
+            padding: 2.5rem 5%;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .main-footer p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .main-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .main-footer a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+                margin: -2rem 3% 2rem 3%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header {
+                flex-direction: column;
+                padding: 1rem 3%;
+            }
+
+            .logo img {
+                height: 60px;
+                width: 60px;
+            }
+
+            .navbar ul {
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0) translateY(0);
+                box-shadow: none;
+                background: rgba(255, 255, 255, 0.1);
+                margin-top: 0.5rem;
+                display: none;
+                grid-template-columns: 1fr;
+                min-width: 100%;
+            }
+
+            .dropdown:hover .dropdown-menu {
+                display: grid;
+            }
+
+            .dropdown-menu a {
+                color: var(--white);
+                padding: 0.8rem 1rem;
+            }
+
+            .dropdown-menu a:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                transform: scale(1);
+            }
+
+            .hero-section {
+                padding: 4rem 3%;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 2rem 3%;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+
+            .volunteer-options {
+                padding: 2rem 1.5rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <img src="assets/logo.png" alt="CrisisConnect Logo">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Services ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#donations">Donations</a></li>
+                        <li><a href="#volunteer">Volunteer</a></li>
+                        <li><a href="#medical">Medical Aid</a></li>
+                        <li><a href="#shelter">Shelter Support</a></li>
+                        <li><a href="#food">Food & Water</a></li>
+                        <li><a href="#transport">Transportation</a></li>
+                        <li><a href="#counseling">Counseling</a></li>
+                        <li><a href="#emergency">Emergency Hotline</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <h1>🆘 Volunteer Feed</h1>
+        <p>Together, we make a difference in times of crisis</p>
+    </section>
+
+    <!-- Real-time Stats Section -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <h3>Total Donations</h3>
+            <div class="stat-number" id="donationAmount">$0</div>
+            <div class="stat-label">Real-time tracking</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="donationProgress" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Active Volunteers</h3>
+            <div class="stat-number" id="volunteerCount">0</div>
+            <div class="stat-label">Signed up today</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Lives Impacted</h3>
+            <div class="stat-number" id="livesImpacted">0</div>
+            <div class="stat-label">People helped this month</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Disaster News Section -->
+        <div class="news-section">
+            <h2 class="section-title">🚨 Active Disasters & Relief Efforts</h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-badge">URGENT</div>
+                    <div class="news-content">
+                        <h3 class="news-title">Flood Emergency in East Region</h3>
+                        <div class="news-meta">
+                            <span>📍 East District</span>
+                            <span>⏰ 2 hours ago</span>
+                        </div>
+                        <p class="news-description">
+                            Heavy rainfall has caused severe flooding affecting over 5,000 families. Immediate need for
+                            food supplies, clean water, and temporary shelter materials.
+                        </p>
+                        <button class="help-btn">🤝 Offer Help</button>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-badge">CRITICAL</div>
+                    <div class="news-content">
+                        <h3 class="news-title">Earthquake Relief Operations</h3>
+                        <div class="news-meta">
+                            <span>📍 North Valley</span>
+                            <span>⏰ 5 hours ago</span>
+                        </div>
+                        <p class="news-description">
+                            6.5 magnitude earthquake struck at dawn. Search and rescue teams deployed. Urgent need for
+                            medical supplies and emergency response volunteers.
+                        </p>
+                        <button class="help-btn">🤝 Offer Help</button>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-badge">ONGOING</div>
+                    <div class="news-content">
+                        <h3 class="news-title">Wildfire Evacuation Support</h3>
+                        <div class="news-meta">
+                            <span>📍 Western Hills</span>
+                            <span>⏰ 1 day ago</span>
+                        </div>
+                        <p class="news-description">
+                            Forest fires continue to spread. 200+ families evacuated to shelters. Need volunteers for
+                            shelter management and supply distribution.
+                        </p>
+                        <button class="help-btn">🤝 Offer Help</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- What You Can Provide Section -->
+        <div class="volunteer-options">
+            <h2 class="section-title">💪 What You Can Provide as a Volunteer</h2>
+            <div class="options-grid">
+                <div class="option-card">
+                    <div class="option-icon">🚑</div>
+                    <div class="option-title">Medical Aid</div>
+                    <div class="option-description">Provide medical supplies, first aid, or healthcare services</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">🍲</div>
+                    <div class="option-title">Food & Water</div>
+                    <div class="option-description">Donate or distribute food, clean water, and nutrition supplies</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">🏠</div>
+                    <div class="option-title">Shelter Support</div>
+                    <div class="option-description">Provide temporary housing or shelter materials</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">🚗</div>
+                    <div class="option-title">Transportation</div>
+                    <div class="option-description">Offer vehicle or logistics support for relief operations</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">👕</div>
+                    <div class="option-title">Clothing & Essentials</div>
+                    <div class="option-description">Donate clothes, blankets, and daily necessities</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">💼</div>
+                    <div class="option-title">Professional Skills</div>
+                    <div class="option-description">Offer expertise in engineering, counseling, or other fields</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">💰</div>
+                    <div class="option-title">Financial Support</div>
+                    <div class="option-description">Make monetary donations for immediate relief efforts</div>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-icon">🏋️</div>
+                    <div class="option-title">Physical Labor</div>
+                    <div class="option-description">Help with cleanup, construction, and ground operations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 CrisisConnect. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        // Real-time donation tracking simulation
+        let donationAmount = 45280;
+        let volunteerCount = 1247;
+        let livesImpacted = 8934;
+        const donationGoal = 100000;
+
+        function updateStats() {
+            donationAmount += Math.floor(Math.random() * 500) + 100;
+            volunteerCount += Math.floor(Math.random() * 3);
+            livesImpacted += Math.floor(Math.random() * 10);
+
+            document.getElementById('donationAmount').textContent = '$' + donationAmount.toLocaleString();
+            document.getElementById('volunteerCount').textContent = volunteerCount.toLocaleString();
+            document.getElementById('livesImpacted').textContent = livesImpacted.toLocaleString();
+
+            const progress = Math.min((donationAmount / donationGoal) * 100, 100);
+            document.getElementById('donationProgress').style.width = progress + '%';
+        }
+
+        updateStats();
+        setInterval(updateStats, 5000);
+
+        document.querySelectorAll('.help-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                alert('Thank you for your willingness to help! You will be redirected to the assistance form.');
+            });
+        });
+
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const title = this.querySelector('.option-title').textContent;
+                alert(`You selected: ${title}\n\nYou will be redirected to provide this type of assistance.`);
+            });
+        });
+    </script>
+</body>
+
+</html>
